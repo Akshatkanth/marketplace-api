@@ -215,16 +215,3 @@ export class Order {
   items!: OrderItem[];
 }
 
-/**
- * INTERVIEW CONCEPTS:
- * 
- * 1. STATE MACHINE: Order follows status progression
- *    PENDING -> CONFIRMED -> SHIPPED -> DELIVERED
- *    Can't go backward (can't un-deliver)
- * 
- * 2. FINANCIAL PRECISION: All amounts use decimal
- * 
- * 3. SEPARATION OF CONCERNS:
- *    - Order = metadata (status, dates, totals)
- *    - OrderItem = individual products (via junction table)
- */
