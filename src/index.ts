@@ -5,6 +5,7 @@ import helmet from "helmet"
 import dotenv from "dotenv"
 import { AppDataSource } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler"
+import { routes } from "./routes"
 import { logger } from "./utils/logger"
 
 dotenv.config();
@@ -25,9 +26,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
+//db
 AppDataSource.initialize()
   .then(() => {
     logger.info("✅ Database connected successfully");
+
+
+    app.use("/api", routes)
+
     app.get("/", (req: Request, res: Response) => {
       res.json({
         message: "Welcome to Marketplace API",
