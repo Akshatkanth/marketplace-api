@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../services/UserService";
 import { ApiError } from "../middleware/errorHandler";
 import { userCreateSchema, userUpdateSchema } from "../utils/validators";
-import { logger } from "../utils/logger";
+
+const getRouteValue = (value: string | string[] | undefined): string => {
+  if (Array.isArray(value)) return value[0] ?? "";
+  return value ?? "";
+};
 
 /**
  * USER CONTROLLER
@@ -68,7 +72,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       const user = await this.userService.getUserById(id);
 
@@ -126,7 +130,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       // Validate update payload
       const { error, value } = userUpdateSchema.validate(req.body);
@@ -158,7 +162,7 @@ export class UserController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       await this.userService.deleteUser(id);
 

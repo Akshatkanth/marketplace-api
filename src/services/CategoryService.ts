@@ -140,21 +140,21 @@ export class CategoryService {
    * 
    * This is a more complex query using SQL aggregation
    */
-  async getCategoriesWithProductCount(): Promise
+  async getCategoriesWithProductCount(): Promise<
     Array<{ id: string; name: string; slug: string; productCount: number }>
   > {
     try {
       /**
        * RAW SQL QUERY EXAMPLE
-       * 
+       *
        * While TypeORM is great for simple queries,
        * complex queries sometimes require raw SQL
-       * 
+       *
        * This query:
        * 1. Gets all active categories
        * 2. Counts products in each category
        * 3. Returns with product count
-       * 
+       *
        * SQL aggregation is important for:
        * - Reporting
        * - Dashboard stats

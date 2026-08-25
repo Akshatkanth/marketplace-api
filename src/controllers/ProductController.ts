@@ -3,6 +3,11 @@ import { ProductService } from "../services/ProductService";
 import { ApiError } from "../middleware/errorHandler";
 import { productCreateSchema, productUpdateSchema } from "../utils/validators";
 
+const getRouteValue = (value: string | string[] | undefined): string => {
+  if (Array.isArray(value)) return value[0] ?? "";
+  return value ?? "";
+};
+
 /**
  * PRODUCT CONTROLLER
  * 
@@ -59,7 +64,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       const product = await this.productService.getProductById(id);
 
@@ -115,7 +120,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { sellerId } = req.params;
+      const sellerId = getRouteValue(req.params.sellerId);
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
@@ -149,7 +154,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       const { error, value } = productUpdateSchema.validate(req.body);
 
@@ -190,7 +195,7 @@ export class ProductController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       // TODO: Get from JWT in Phase 2
       const sellerId = req.body.sellerId;

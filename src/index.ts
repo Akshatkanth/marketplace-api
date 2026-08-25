@@ -1,12 +1,12 @@
-import "reflect-metadata"
-import express, { Express, Request, Response, NextFunction } from "express";
+import "reflect-metadata";
+import express, { Express, Request, Response } from "express";
 import cors from "cors";
-import helmet from "helmet"
-import dotenv from "dotenv"
+import helmet from "helmet";
+import dotenv from "dotenv";
 import { AppDataSource } from "./config/database";
-import { errorHandler } from "./middleware/errorHandler"
-import { routes } from "./routes"
-import { logger } from "./utils/logger"
+import { errorHandler } from "./middleware/errorHandler";
+import routes from "./routes";
+import { logger } from "./utils/logger";
 
 dotenv.config();
 
@@ -18,13 +18,15 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 
 //CORS middleware - allows request from other domains
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.APP_URL || "http://localhost:3000",
     credentials: true,
-}));
+  })
+);
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }));
 
 //db
 AppDataSource.initialize()
@@ -32,17 +34,16 @@ AppDataSource.initialize()
     logger.info("✅ Database connected successfully");
 
 
-    app.use("/api", routes)
+    app.use("/api", routes);
 
-    app.get("/", (req: Request, res: Response) => {
+    app.get("/", (_req: Request, res: Response) => {
       res.json({
         message: "Welcome to Marketplace API",
         version: "1.0.0",
       });
     });
 
-
-app.use(errorHandler);
+    app.use(errorHandler);
 
     // Start server
     app.listen(PORT, () => {

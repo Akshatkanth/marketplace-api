@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../config/database";
 import { User } from "../entities";
 import { ApiError } from "../middleware/errorHandler";
-import { logger } from "./logger";
+import { logger } from "../utils/logger";
 import { v4 as uuidv4 } from "uuid";
 
 export class UserService {

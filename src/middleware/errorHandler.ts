@@ -14,10 +14,10 @@ export class ApiError extends Error {
 
 export const errorHandler = (
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
-) => {
+  _next: NextFunction
+): Response => {
   logger.error("Error:", error);
 
   if (error instanceof ApiError) {
@@ -31,7 +31,7 @@ export const errorHandler = (
     });
   }
 
-  res.status(500).json({
+  return res.status(500).json({
     success: false,
     error: {
       message: "Internal server error",

@@ -3,6 +3,11 @@ import { CategoryService } from "../services/CategoryService";
 import { ApiError } from "../middleware/errorHandler";
 import { categoryCreateSchema, categoryUpdateSchema } from "../utils/validators";
 
+const getRouteValue = (value: string | string[] | undefined): string => {
+  if (Array.isArray(value)) return value[0] ?? "";
+  return value ?? "";
+};
+
 /**
  * CATEGORY CONTROLLER
  * 
@@ -49,7 +54,7 @@ export class CategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       const category = await this.categoryService.getCategoryById(id);
 
@@ -73,7 +78,7 @@ export class CategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { slug } = req.params;
+      const slug = getRouteValue(req.params.slug);
 
       const category = await this.categoryService.getCategoryBySlug(slug);
 
@@ -90,7 +95,7 @@ export class CategoryController {
    * GET ALL CATEGORIES - GET /api/categories
    */
   async getAllCategories(
-    req: Request,
+    _req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
@@ -113,7 +118,7 @@ export class CategoryController {
    * More detailed view with product counts
    */
   async getCategoriesWithStats(
-    req: Request,
+    _req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
@@ -140,7 +145,7 @@ export class CategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       const { error, value } = categoryUpdateSchema.validate(req.body);
 
@@ -171,7 +176,7 @@ export class CategoryController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = getRouteValue(req.params.id);
 
       await this.categoryService.deleteCategory(id);
 

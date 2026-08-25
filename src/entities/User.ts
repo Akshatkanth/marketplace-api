@@ -18,6 +18,9 @@ export class User {
     @Column({type: "varchar", length:255, unique:true}) //user email
     email!: string;
 
+    @Column({ type: "varchar", length: 255, nullable: true })
+    fullName?: string | null;
+
     @Column({type: "varchar", length: 255}) //user password -> will be hashed by bcrypt - 2rounds
     password!: string; 
 

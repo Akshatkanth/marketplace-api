@@ -100,7 +100,7 @@ export class ProductService {
     try {
       const product = await this.productRepository.findOne({
         where: { id, isActive: true },
-        relations: ["category", "seller"], // Load related entities
+        relations: { category: true, seller: true },
       });
 
       if (!product) {
@@ -163,7 +163,7 @@ export class ProductService {
 
       const [products, total] = await this.productRepository.findAndCount({
         where,
-        relations: ["category", "seller"],
+        relations: { category: true, seller: true },
         order: { createdAt: "DESC" },
         skip: offset,
         take: limit,
@@ -201,7 +201,7 @@ export class ProductService {
 
       const [products, total] = await this.productRepository.findAndCount({
         where: { sellerId },
-        relations: ["category"],
+        relations: { category: true },
         order: { createdAt: "DESC" },
         skip: offset,
         take: limit,

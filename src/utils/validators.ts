@@ -1,5 +1,26 @@
 import Joi from "joi" //for schema validation
 
+export const categoryCreateSchema = Joi.object({
+  name: Joi.string().min(2).max(100).required().messages({
+    "string.min": "Category name must be at least 2 characters",
+    "any.required": "Category name is required",
+  }),
+  slug: Joi.string().lowercase().pattern(/^[a-z0-9-]+$/).required().messages({
+    "string.pattern.base": "Slug must contain only lowercase letters, numbers, and hyphens",
+    "any.required": "Slug is required",
+  }),
+  description: Joi.string().max(500).optional(),
+  image: Joi.string().uri().optional(),
+}).unknown(false);
+
+export const categoryUpdateSchema = Joi.object({
+  name: Joi.string().min(2).max(100).optional(),
+  slug: Joi.string().lowercase().pattern(/^[a-z0-9-]+$/).optional(),
+  description: Joi.string().max(500).optional(),
+  image: Joi.string().uri().optional(),
+  isActive: Joi.boolean().optional(),
+}).unknown(false);
+
 export const userCreateSchema = Joi.object({
     email: Joi.string()
         .email()
