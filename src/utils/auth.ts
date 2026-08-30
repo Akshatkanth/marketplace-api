@@ -36,10 +36,11 @@ export const generateAccessToken = (
   role: string,
   email: string
 ): string => {
+  const secret = (process.env.JWT_ACCESS_SECRET ?? 'development-access-secret') as string;
   return jwt.sign(
     { userId, role, email },
-    process.env.JWT_ACCESS_SECRET!,
-    { expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m' }
+    secret,
+    { expiresIn: (process.env.JWT_ACCESS_EXPIRY || '15m') as jwt.SignOptions['expiresIn'] }
   );
 };
 
@@ -49,10 +50,11 @@ export const generateAccessToken = (
  * @returns JWT token
  */
 export const generateRefreshToken = (userId: string): string => {
+  const secret = (process.env.JWT_REFRESH_SECRET ?? 'development-refresh-secret') as string;
   return jwt.sign(
     { userId },
-    process.env.JWT_REFRESH_SECRET!,
-    { expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d' }
+    secret,
+    { expiresIn: (process.env.JWT_REFRESH_EXPIRY || '7d') as jwt.SignOptions['expiresIn'] }
   );
 };
 

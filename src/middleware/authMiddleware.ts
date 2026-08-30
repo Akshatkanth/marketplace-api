@@ -21,7 +21,7 @@ declare global {
  */
 export const authMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ): void => {
   try {
@@ -63,7 +63,7 @@ export const authMiddleware = (
  * Usage: app.post('/admin', requireRole('ADMIN'), controller)
  */
 export const requireRole = (requiredRole: string) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, _res: Response, next: NextFunction): void => {
     if (!req.user) {
       return next(new ApiError(401, 'Authentication required'));
     }
