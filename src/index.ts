@@ -7,6 +7,7 @@ import { AppDataSource } from "./config/database";
 import { errorHandler } from "./middleware/errorHandler";
 import routes from "./routes";
 import { logger } from "./utils/logger";
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(
   })
 );
 
+app.use('/api/auth', authRoutes);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

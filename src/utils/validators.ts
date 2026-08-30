@@ -152,6 +152,8 @@ export const productCreateSchema = Joi.object({
     .optional(),
 });
 
+
+
 export const productUpdateSchema = Joi.object({
   name: Joi.string().min(3).max(255).optional(),
   slug: Joi.string().lowercase().pattern(/^[a-z0-9-]+$/).optional(),
@@ -164,3 +166,50 @@ export const productUpdateSchema = Joi.object({
   images: Joi.array().items(Joi.string().uri()).optional(),
   isActive: Joi.boolean().optional(),
 }).unknown(false);
+
+export const authRegisterSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Must be a valid email',
+    'any.required': 'Email is required',
+  }),
+  password: Joi.string()
+    .min(8)
+    .pattern(/[A-Z]/) // At least one uppercase
+    .pattern(/[a-z]/) // At least one lowercase
+    .pattern(/\d/) // At least one number
+    .required()
+    .messages({
+      'string.min': 'Password must be at least 8 characters',
+      'string.pattern.base': 'Password must contain uppercase, lowercase, and numbers',
+      'any.required': 'Password is required',
+    }),
+  fullName: Joi.string().min(2).required().messages({
+    'string.min': 'Full name must be at least 2 characters',
+    'any.required': 'Full name is required',
+  }),
+  role: Joi.string()
+    .valid('BUYER', 'SELLER', 'ADMIN')
+    .default('BUYER'),
+});
+
+/**
+ * Validation schema for user login
+ */
+export const authLoginSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'Must be a valid email',
+    'any.required': 'Email is required',
+  }),
+  password: Joi.string().required().messages({
+    'any.required': 'Password is required',
+  }),
+});
+
+/**
+ * Validation schema for token refresh
+ */
+export const authRefreshSchema = Joi.object({
+  refreshToken: Joi.string().required().messages({
+    'any.required': 'Refresh token is required',
+  }),
+});

@@ -4,6 +4,8 @@ import { User } from "../entities";
 import { ApiError } from "../middleware/errorHandler";
 import { logger } from "../utils/logger";
 import { v4 as uuidv4 } from "uuid";
+import { hashPassword, comparePassword } from '../utils/auth';
+import { ApiError } from '../middleware/errorHandler';
 
 export class UserService {
   /**
@@ -15,6 +17,74 @@ export class UserService {
    * Methods: save(), find(), findOne(), delete(), update(), etc.
    */
   private userRepository: Repository<User> = AppDataSource.getRepository(User);
+
+
+  async registerUser(userData: {
+  email: string;
+  password: string;
+  fullName: string;
+  role: 'BUYER' | 'SELLER' | 'ADMIN';
+}): Promise<User> {
+  const userRepo = AppDataSource.getRepository(User);
+
+  // Check if email already exists
+  const existingUser = await userRepo.findOne({ where: { email: userData.email } });
+  if (existingUser) {
+    throw new ApiError(409, 'Email already registered');
+  }
+
+  // Hash password
+  const hashedPassword = await hashPassword(userData.password);
+
+  // Create and save user
+  const user = userRepo.create({
+    email: userData.email,
+    password: hashedPassword,
+    fullName: userData.fullName,
+    role: userData.role,
+    isActive: true,
+  });
+
+  return userRepo.save(user);
+}
+
+/**
+ * Authenticate user (verify email and password)
+ */
+async authenticateUser(
+  email: string,
+  password: string
+): Promise<User> {
+  const userRepo = AppDataSource.getRepository(User);
+
+  const user = await userRepo.findOne({ where: { email } });
+  if (!user) {
+    throw new ApiError(401, 'Invalid email or password');
+  }
+
+  // Compare password
+  const isPasswordValid = await comparePassword(password, user.password);
+  if (!isPasswordValid) {
+    throw new ApiError(401, 'Invalid email or password');
+  }
+
+  return user;
+}
+
+/**
+ * Find user by ID
+ */
+async getUserById(userId: string): Promise<User> {
+  const userRepo = AppDataSource.getRepository(User);
+  
+  const user = await userRepo.findOne({ where: { id: userId } });
+  if (!user) {
+    throw new ApiError(404, 'User not found');
+  }
+
+  return user;
+}
+
 
   /**
    * CREATE USER
