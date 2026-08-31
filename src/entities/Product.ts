@@ -12,6 +12,7 @@ import {
 import { User } from "./User";
 import { Category } from "./Category";
 import { OrderItem } from "./OrderItem";
+import { CartItem } from "./CartItem";
 
 @Entity("products")
 @Index(["categoryId"])
@@ -157,6 +158,9 @@ export class Product{
    */
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems!: OrderItem[];
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product)
+  cartItems!: CartItem[];
 }
 
 

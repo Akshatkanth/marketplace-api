@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { Order } from "./Order";
 import { Product } from "./Product";
-
+import { CartItem } from './CartItem';
 
 @Entity("users")
 export class User {
@@ -92,6 +92,8 @@ export class User {
   @OneToMany(() => Order, (order) => order.user)
   orders!: Order[];
 
+  
+
   /**
    * ONE USER CAN SELL MULTIPLE PRODUCTS
    * 
@@ -99,6 +101,9 @@ export class User {
    */
   @OneToMany(() => Product, (product) => product.seller)
   products!: Product[];
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.user)
+  cartItems!: CartItem[];
 }
 
 
