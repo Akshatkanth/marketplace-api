@@ -213,3 +213,62 @@ export const authRefreshSchema = Joi.object({
     'any.required': 'Refresh token is required',
   }),
 });
+
+/**
+ * Validation schema for adding item to cart
+ */
+export const cartAddItemSchema = Joi.object({
+  productId: Joi.string().uuid().required().messages({
+    'string.guid': 'Product ID must be a valid UUID',
+    'any.required': 'Product ID is required',
+  }),
+  quantity: Joi.number().integer().min(1).required().messages({
+    'number.min': 'Quantity must be at least 1',
+    'any.required': 'Quantity is required',
+  }),
+});
+
+/**
+ * Validation schema for updating cart item quantity
+ */
+export const cartUpdateItemSchema = Joi.object({
+  quantity: Joi.number().integer().min(1).required().messages({
+    'number.min': 'Quantity must be at least 1',
+    'any.required': 'Quantity is required',
+  }),
+});
+
+/**
+ * Validation schema for creating an order
+ */
+export const orderCreateSchema = Joi.object({
+  shippingAddress: Joi.string().min(5).required().messages({
+    'string.min': 'Shipping address must be at least 5 characters',
+    'any.required': 'Shipping address is required',
+  }),
+  billingAddress: Joi.string().min(5).required().messages({
+    'string.min': 'Billing address must be at least 5 characters',
+    'any.required': 'Billing address is required',
+  }),
+  paymentMethod: Joi.string()
+    .valid('CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'BANK_TRANSFER')
+    .required()
+    .messages({
+      'any.only': 'Payment method must be CREDIT_CARD, DEBIT_CARD, PAYPAL, or BANK_TRANSFER',
+      'any.required': 'Payment method is required',
+    }),
+  notes: Joi.string().optional(),
+});
+
+/**
+ * Validation schema for updating order status
+ */
+export const orderUpdateStatusSchema = Joi.object({
+  status: Joi.string()
+    .valid('PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'COMPLETED', 'CANCELLED')
+    .required()
+    .messages({
+      'any.only': 'Status must be PENDING, CONFIRMED, SHIPPED, DELIVERED, COMPLETED, or CANCELLED',
+      'any.required': 'Status is required',
+    }),
+});
