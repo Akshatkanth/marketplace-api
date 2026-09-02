@@ -1,4 +1,4 @@
-import Joi from "joi" //for schema validation
+import Joi from "joi" 
 
 export const categoryCreateSchema = Joi.object({
   name: Joi.string().min(2).max(100).required().messages({
